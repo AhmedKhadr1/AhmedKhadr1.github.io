@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="About Ahmed Kheder — AI & Robotics enthusiast at Ain Shams University." />
+  <meta name="theme-color" content="#fbfaf5" />
+  <title>About — Ahmed Kheder</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap site-header__row">
+      <a href="index.html" class="brand">Ahmed Kheder</a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="about.html" class="is-active">About</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap content">
+      <h1 class="page-title">About</h1>
+      <p class="role">A bit about me.</p>
+
+      <p class="lead">
+        I'm an AI &amp; Robotics enthusiast with a Computer Engineering background,
+        skilled in Python and TensorFlow. I leverage data-driven methods and
+        predictive models to develop intelligent systems that address real-world
+        problems.
+      </p>
+
+      <p>
+        Precise, curious, and committed to continual innovation &mdash; I enjoy
+        moving from raw signals all the way to deployed models, and I'm
+        especially drawn to problems at the intersection of biosignals,
+        perception, and control.
+      </p>
+
+      <p class="status">
+        <span class="dot" aria-hidden="true"></span>
+        Based in Cairo, Egypt &mdash; available for opportunities.
+      </p>
+
+      <dl class="facts">
+        <dt>Studying</dt><dd>BSc, Computer &amp; Systems Engineering</dd>
+        <dt>University</dt><dd>Ain Shams University, Cairo</dd>
+        <dt>Period</dt><dd>Sep 2021 &mdash; Present</dd>
+        <dt>GPA</dt><dd>3.52 / 4.00</dd>
+        <dt>Focus</dt><dd>AI · Deep Learning · Robotics</dd>
+      </dl>
+
+      <section class="section" id="skills">
+        <h2 class="section-title">Technical skills</h2>
+        <p class="section-sub">What I work with day to day.</p>
+
+        <div class="skill-block">
+          <span class="skill-block__label">Languages</span>
+          <span class="skill-block__items">C / C++, Python, Java, SQL, Assembly (ARM)</span>
+        </div>
+        <div class="skill-block">
+          <span class="skill-block__label">ML &amp; AI</span>
+          <span class="skill-block__items">PyTorch, TensorFlow, Scikit-learn, XGBoost, RegEx</span>
+        </div>
+        <div class="skill-block">
+          <span class="skill-block__label">Data &amp; viz</span>
+          <span class="skill-block__items">NumPy, Pandas, Matplotlib, Seaborn</span>
+        </div>
+        <div class="skill-block">
+          <span class="skill-block__label">Tools</span>
+          <span class="skill-block__items">Git &amp; GitHub, MongoDB, MySQL, Qt, MATLAB</span>
+        </div>
+      </section>
+
+      <section class="section" id="education">
+        <h2 class="section-title">Education</h2>
+
+        <div class="entry">
+          <div class="entry__head">
+            <span class="entry__title">BSc in Computer &amp; Systems Engineering</span>
+            <span class="entry__date">Sep 2021 — Present</span>
+          </div>
+          <p class="entry__org">Ain Shams University, Cairo · GPA 3.52 / 4.00</p>
+          <p class="muted">
+            Key modules: Machine Learning, Deep Learning, Operating Systems,
+            Database Systems, Data Structures &amp; Algorithms, Advanced
+            Programming, Artificial Intelligence, Embedded Systems, and Control
+            Engineering.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" id="certifications">
+        <h2 class="section-title">Certifications</h2>
+
+        <div class="entry">
+          <div class="entry__head">
+            <span class="entry__title">Machine Learning Specialization</span>
+            <span class="entry__date">Certification</span>
+          </div>
+          <p class="entry__org">DeepLearning.AI &amp; Stanford University</p>
+          <ul>
+            <li>Supervised ML: Regression &amp; Classification.</li>
+            <li>Unsupervised Learning, Recommenders, Reinforcement Learning.</li>
+          </ul>
+        </div>
+
+        <div class="entry">
+          <div class="entry__head">
+            <span class="entry__title">AI, Data Science &amp; Machine Learning</span>
+            <span class="entry__date">Diploma</span>
+          </div>
+          <p class="entry__org">WE Telecom Egypt</p>
+          <ul>
+            <li>Data cleaning, feature engineering, model tuning.</li>
+            <li>Deep-learning foundations with TensorFlow (CNNs, RNNs).</li>
+            <li>Capstone: image-classification model.</li>
+          </ul>
+        </div>
+
+        <div class="entry">
+          <div class="entry__head">
+            <span class="entry__title">Python for Everybody</span>
+            <span class="entry__date">Certification</span>
+          </div>
+          <p class="entry__org">University of Michigan</p>
+          <ul>
+            <li>Python basics, data collection &amp; processing.</li>
+            <li>Functions, files, dictionaries, classes &amp; inheritance.</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="actions">
+        <a href="projects.html">See my projects &rarr;</a>
+        <span class="sep">·</span>
+        <a href="assets/Ahmed_Kheder_CV.pdf" download>Download CV (PDF)</a>
+        <span class="sep">·</span>
+        <a href="contact.html">Get in touch</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap site-footer__row">
+      <span>© <span id="year"></span> Ahmed Kheder</span>
+      <span>Cairo, Egypt</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
