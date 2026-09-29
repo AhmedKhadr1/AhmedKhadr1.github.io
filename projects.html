@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Selected projects by Ahmed Kheder — EEG signal classification, geospatial ML, and more." />
+  <meta name="description" content="Selected projects by Ahmed Kheder — an autonomous LLM verification agent, real-time ECG forecasting, EEG classification, and more." />
   <meta name="theme-color" content="#fbfaf5" />
   <title>Projects — Ahmed Kheder</title>
 
@@ -44,34 +44,54 @@
   <main id="main">
     <div class="wrap content">
       <h1 class="page-title">Projects</h1>
-      <p class="role">Selected work in deep learning, signal processing, and classical ML.</p>
+      <p class="role">Selected work in LLM agents, time-series forecasting, and deep learning.</p>
 
       <ul class="project-list">
 
-        <li class="project">
+        <li class="project" id="vai">
           <h2 class="project__title">
-            AI-Driven Functional Verification for Digital Designs
+            VAI: AI-Driven Functional Verification for Digital Designs
           </h2>
           <p class="project__meta">Graduation Project · LLM Agents · Hardware Verification</p>
           <p class="project__desc">
-            An autonomous LLM agent that closes functional coverage on digital
-            designs by iteratively planning, generating, validating, and
-            reacting over a tool-calling protocol  with a custom memory
-            stack and a novel quantitative benchmark.
+            An autonomous LLM agent that tests chip designs by itself: it reads
+            the design, writes test inputs, runs them in a live simulator, and
+            keeps going until every required behaviour has been exercised.
           </p>
           <ul class="project__points">
-            <li>Designed an autonomous <strong>ReAct LLM agent</strong> that closes functional coverage on digital designs through iterative plan&ndash;generate&ndash;validate&ndash;react loops over a tool-calling protocol.</li>
-            <li>Authored a layered system prompt covering role, invariants, tool-tier discipline, code-generation conventions, and error-recovery semantics  establishing the primary behavioural contract for the agent.</li>
-            <li>Designed an <strong>MCP-style tool layer</strong> with a structured-output contract that decouples the model's code-emission surface from invocation schemas via runtime state-injection wrappers.</li>
+            <li>Reached <strong>full coverage on 4 of 5 open-source designs</strong> and closed <strong>84% of the testing gaps</strong> left by the traditional method (average coverage 89% &rarr; 98%).</li>
+            <li>Reached full coverage in <strong>7 minutes on average</strong>, compared with 60-minute traditional runs that still fell short, at an average LLM cost of <strong>~$0.30 per design</strong>.</li>
+            <li>Wrote a layered system prompt defining the agent's role, constraints, tool-usage rules, code-generation conventions, and error-recovery behaviour.</li>
+            <li>Designed an <strong>MCP-style tool layer</strong> with structured outputs, separating the model's generated code from tool-invocation schemas via runtime state injection.</li>
             <li>Implemented a <strong>stratified context-management layer</strong> with a tiered memory hierarchy and per-tier token budgets, plugged into the graph as a pre-model hook and persisted across process restarts via checkpointing.</li>
-            <li>Engineered <strong>agent-driven memory dynamics</strong>  the model summarises its own over-budget context slices, and chain trial-and-error sequences collapse into single durable artefacts via the agent's narrative tags.</li>
-            <li>Architected a <strong>persistent agent-memory layer</strong> combining many-to-many strategy storage with deduplication, alongside a project-scoped relational knowledge store with module-aware signal disambiguation for cross-run retrieval.</li>
-            <li>Developed the <strong>VAI score</strong>, a novel composite quantitative metric for benchmarking AI-driven verification designs.</li>
+            <li>Engineered <strong>agent-driven memory dynamics</strong>: the model summarises its own over-budget context slices, and chains of trial-and-error collapse into single durable lessons via the agent's narrative tags.</li>
+            <li>Built a <strong>persistent cross-run memory</strong>: many-to-many strategy storage with deduplication, plus a project-scoped relational knowledge base with module-aware signal disambiguation for retrieving past solutions.</li>
+            <li>Designed the <strong>VAI score</strong>, a novel composite metric for benchmarking AI-driven verification.</li>
           </ul>
-          <p class="project__stack">Python · LangGraph · LangChain · ReAct · MCP-style tools</p>
+          <p class="project__stack">Python · LangGraph · LangChain · MCP</p>
         </li>
 
-        <li class="project">
+        <li class="project" id="ecg">
+          <h2 class="project__title">
+            Real-Time ECG Waveform Forecasting
+          </h2>
+          <p class="project__meta">Research Internship, Nile University · Time-Series · Foundation Models</p>
+          <p class="project__desc">
+            A real-time system that forecasts the next second of a patient's
+            ECG &mdash; beat by beat &mdash; and a new way to measure whether
+            those forecasts are actually right.
+          </p>
+          <ul class="project__points">
+            <li>Split the signal into beat timing, beat type, beat shape, and a slow low-frequency component, forecast by a <strong>zero-shot Chronos</strong> model, a beat-type classifier, and <strong>fine-tuned Chronos-Bolt</strong> models.</li>
+            <li>Achieved <strong>NMAE of 0.018</strong> and MSE of 0.10 on patients never seen in training.</li>
+            <li>Designed a <strong>new per-beat metric</strong> scoring timing, height, and shape separately, since standard error metrics blend these errors and can reward flat, smeared forecasts. The typical forecast placed beats within 15&nbsp;ms (about 2% of a heartbeat) at 76% of their true height, with 27% shape error.</li>
+            <li><strong>Outperformed the FADE paper (2025)</strong> on normal rhythm under equal conditions, using its open-source code and training split: 14% lower NMAE, 7% lower MAE, and beats at 81% vs. 72% of true height.</li>
+            <li>Explored reservoir computing, next-generation reservoir computing (NG-RC), and Transformers along the way.</li>
+          </ul>
+          <p class="project__stack">Python · PyTorch · Chronos · Transformers · Fine-tuning</p>
+        </li>
+
+        <li class="project" id="eeg">
           <h2 class="project__title">
             <a href="https://github.com/AhmedKhadr1/EEG-Net" target="_blank" rel="noopener noreferrer">
               Motor Imagery Classification<span class="ext">↗ GitHub</span>
@@ -80,19 +100,18 @@
           <p class="project__meta">Deep Learning · EEG / BCI · PyTorch</p>
           <p class="project__desc">
             End-to-end EEG pipeline for classifying motor-imagery signals from a
-            Muse-S headset from raw recordings to trained CNN / Bi-LSTM
-            models.
+            Muse-S headset, from raw recordings to trained CNN / Bi-LSTM models.
           </p>
           <ul class="project__points">
             <li>Segmented continuous Muse-S EEG into epoch-labelled DataFrames with subject and session metadata.</li>
-            <li>Automated MNE-Python pipeline: band-pass + notch filters, ICA artefact removal, CAR, z-score normalisation.</li>
-            <li>Offline augmentation (Gaussian noise, temporal shifts, window jitter); packaged into efficient PyTorch <code>Dataset</code> / <code>DataLoader</code>.</li>
-            <li>Fine-tuned <strong>EEGNet-8-2</strong> CNN and <strong>Bi-LSTM</strong> models in PyTorch / TensorFlow with reproducible training and checkpointing.</li>
+            <li>Automated MNE-Python preprocessing: band-pass and notch filtering, ICA artifact removal, CAR, and z-score normalisation.</li>
+            <li>Offline augmentation (Gaussian noise, temporal shifts, window jitter), packaged into efficient PyTorch <code>Dataset</code> / <code>DataLoader</code> pipelines.</li>
+            <li>Implemented and fine-tuned <strong>EEGNet-8-2</strong> CNN and <strong>Bi-LSTM</strong> models in PyTorch / TensorFlow with reproducible training and checkpointing.</li>
           </ul>
-          <p class="project__stack">Python · PyTorch · TensorFlow · MNE · Pandas · NumPy</p>
+          <p class="project__stack">Python · PyTorch · TensorFlow · MNE</p>
         </li>
 
-        <li class="project">
+        <li class="project" id="sf-crime">
           <h2 class="project__title">
             <a href="https://github.com/AhmedKhadr1/San-Francisco-Crime-Classification" target="_blank" rel="noopener noreferrer">
               San Francisco Crime Classification<span class="ext">↗ GitHub</span>
@@ -100,13 +119,12 @@
           </h2>
           <p class="project__meta">Classical ML · Geospatial · LightGBM</p>
           <p class="project__desc">
-            Multi-class classification on the SF crime dataset  from
-            feature engineering through to spatial visualisation and model
-            benchmarking.
+            Multi-class classification on the SF crime dataset, from feature
+            engineering through to spatial visualisation and model benchmarking.
           </p>
           <ul class="project__points">
-            <li>Parsed temporal features, removed spatial outliers and duplicates, one-hot-encoded categoricals, standard-scaled numerics.</li>
-            <li>Trained tuned <strong>Random Forest</strong>, <strong>LightGBM</strong>, and <strong>Logistic Regression</strong> classifiers.</li>
+            <li>Parsed temporal features, removed spatial outliers and duplicates, one-hot-encoded categoricals, and standard-scaled numerics.</li>
+            <li>Trained and tuned <strong>Random Forest</strong>, <strong>LightGBM</strong>, and <strong>Logistic Regression</strong> classifiers.</li>
             <li>Benchmarked performance with multi-class ROC curves and produced spatial crime visualisations.</li>
           </ul>
           <p class="project__stack">Python · Scikit-learn · LightGBM · Pandas · Matplotlib</p>
@@ -120,6 +138,7 @@
         <a href="contact.html">Get in touch</a>
       </div>
     </div>
+  
   </main>
 
   <footer class="site-footer">
