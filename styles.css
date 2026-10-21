@@ -529,6 +529,72 @@ p { margin-bottom: 1.3em; }
 }
 .reveal.is-visible { opacity: 1; transform: translateY(0); }
 
+/* ---------- Certificates ---------- */
+.cert-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 40px 28px;
+}
+.cert { display: flex; flex-direction: column; }
+.cert__image {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  background: var(--bg-soft);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.cert__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  transition: transform var(--dur) var(--ease);
+}
+.cert__image:hover img { transform: scale(1.02); }
+.cert__placeholder {
+  display: none;
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--text-soft);
+}
+.cert__image.is-missing { pointer-events: none; }
+.cert__image.is-missing img { display: none; }
+.cert__image.is-missing .cert__placeholder { display: flex; }
+.cert__title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 2px;
+  line-height: 1.3;
+}
+.cert__org {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin: 0 0 8px;
+}
+.cert__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  margin: 0;
+}
+.cert__verify { font-weight: 500; }
+.cert-section:first-of-type { padding-top: 0; }
+
 /* ---------- Mobile ---------- */
 @media (max-width: 640px) {
   body { font-size: 17px; }
@@ -537,7 +603,7 @@ p { margin-bottom: 1.3em; }
   .site-header { padding-top: 24px; padding-bottom: 20px; }
   .site-header__row { padding: 0 22px; gap: 14px; }
   .site-footer__row { padding: 0 22px; }
-  .site-nav { gap: 14px; font-size: 0.92rem; }
+  .site-nav { gap: 8px 12px; font-size: 0.92rem; flex-wrap: wrap; }
   .page-title { font-size: clamp(2rem, 8vw, 2.8rem); }
   .role { margin-bottom: 64px; }
   .section { padding-top: 64px; }
@@ -552,6 +618,7 @@ p { margin-bottom: 1.3em; }
   .entry__head { gap: 4px; }
   .facts { grid-template-columns: 1fr; gap: 2px 0; }
   .facts dt { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 8px; }
+  .cert-grid { grid-template-columns: 1fr; gap: 36px; }
 }
 
 /* Reduced motion */
