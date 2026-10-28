@@ -595,6 +595,25 @@ p { margin-bottom: 1.3em; }
 .cert__verify { font-weight: 500; }
 .cert-section:first-of-type { padding-top: 0; }
 
+.cert-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 5px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color var(--dur), background var(--dur);
+}
+.cert-link:hover { border-color: var(--text-muted); background: var(--bg-soft); color: var(--text); }
+.cert:target .cert__image { outline: 2px solid var(--link); outline-offset: 3px; }
+.cert { scroll-margin-top: 24px; }
+
 /* ---------- Mobile ---------- */
 @media (max-width: 640px) {
   body { font-size: 17px; }
