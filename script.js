@@ -25,12 +25,18 @@
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
   /* Certificate viewer: opens certificate images in an in-page dialog with
-     zoom, drag-to-pan, previous/next, and download. Without JavaScript the
-     links still open the image directly. */
+     zoom (buttons, click, scroll wheel, keys), drag-to-pan, previous/next,
+     and download. Without JavaScript the links still open the image directly. */
   const certLinks = Array.from(document.querySelectorAll('.cert__image'));
   if (!certLinks.length || typeof HTMLDialogElement !== 'function') return;
 
-  const MAX_ZOOM = 4;
+  const MAX_ZOOM = 5;
+  const CLICK_ZOOM = 2.5;
+  const ICON = (sign) =>
+    '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" ' +
+    'stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4M8 11h6' +
+    (sign === '+' ? 'M11 8v6' : '') + '"/></svg>';
+
   const dialog = document.createElement('dialog');
   dialog.className = 'viewer';
   dialog.setAttribute('aria-label', 'Certificate viewer');
@@ -38,10 +44,10 @@
     '<div class="viewer__bar">' +
       '<p class="viewer__title"></p>' +
       '<div class="viewer__actions">' +
-        '<button type="button" data-act="out" aria-label="Zoom out">&minus;</button>' +
-        '<button type="button" data-act="in" aria-label="Zoom in">+</button>' +
+        '<button type="button" data-act="out" aria-label="Zoom out" title="Zoom out">' + ICON('-') + '</button>' +
+        '<button type="button" data-act="in" aria-label="Zoom in" title="Zoom in">' + ICON('+') + '</button>' +
         '<a class="viewer__download" download>Download</a>' +
-        '<button type="button" data-act="close" aria-label="Close">&times;</button>' +
+        '<button type="button" data-act="close" aria-label="Close" title="Close">&times;</button>' +
       '</div>' +
     '</div>' +
     '<div class="viewer__stage"><img class="viewer__img" alt="" draggable="false" /></div>' +
@@ -53,28 +59,32 @@
   const img = dialog.querySelector('.viewer__img');
   const title = dialog.querySelector('.viewer__title');
   const download = dialog.querySelector('.viewer__download');
+  const zoomOutBtn = dialog.querySelector('[data-act="out"]');
   let index = 0;
   let zoom = 1;
   let baseWidth = 0;
+  let dragged = false;
 
+  /* Zoom to `next` (1 = fit), keeping the point under (focusX, focusY) still. */
   function setZoom(next, focusX, focusY) {
     const target = Math.min(MAX_ZOOM, Math.max(1, next));
-    if (target === zoom) return;
+    if (Math.abs(target - zoom) < 0.001) return;
     if (zoom === 1) baseWidth = img.getBoundingClientRect().width;
-    // keep the point under the cursor (or the centre) in place while zooming
     const rect = stage.getBoundingClientRect();
     const fx = focusX === undefined ? rect.width / 2 : focusX - rect.left;
     const fy = focusY === undefined ? rect.height / 2 : focusY - rect.top;
     const ratio = target / zoom;
     const anchorX = (stage.scrollLeft + fx) * ratio - fx;
     const anchorY = (stage.scrollTop + fy) * ratio - fy;
-    zoom = target;
+    zoom = target < 1.02 ? 1 : target;
     stage.classList.toggle('is-zoomed', zoom > 1);
+    zoomOutBtn.disabled = zoom === 1;
     img.style.width = zoom > 1 ? Math.round(baseWidth * zoom) + 'px' : '';
     stage.scrollLeft = zoom > 1 ? anchorX : 0;
     stage.scrollTop = zoom > 1 ? anchorY : 0;
   }
 
+  /* Show certificate number i (wraps around) at fit-to-screen size. */
   function show(i) {
     index = (i + certLinks.length) % certLinks.length;
     const link = certLinks[index];
@@ -83,6 +93,7 @@
     zoom = 1;
     img.style.width = '';
     stage.classList.remove('is-zoomed');
+    zoomOutBtn.disabled = true;
     img.src = link.getAttribute('href');
     img.alt = name + ' certificate';
     title.textContent = name;
@@ -99,6 +110,12 @@
     });
   });
 
+  // focus goes back to the card on close; blur it so mouse users don't see a focus ring
+  dialog.addEventListener('close', () => {
+    const active = document.activeElement;
+    if (active && active.classList.contains('cert__image') && !active.matches(':focus-visible')) active.blur();
+  });
+
   dialog.addEventListener('click', (e) => {
     const act = e.target.closest('[data-act]')?.dataset.act;
     if (act === 'close') dialog.close();
@@ -106,7 +123,8 @@
     else if (act === 'out') setZoom(zoom / 1.5);
     else if (act === 'prev') show(index - 1);
     else if (act === 'next') show(index + 1);
-    else if (e.target === dialog || e.target === stage) dialog.close();
+    // a click on the dark area closes the viewer, but never at the end of a drag or while zoomed
+    else if ((e.target === dialog || e.target === stage) && zoom === 1 && !dragged) dialog.close();
   });
 
   dialog.addEventListener('keydown', (e) => {
@@ -114,13 +132,20 @@
     else if (e.key === 'ArrowRight') show(index + 1);
     else if (e.key === '+' || e.key === '=') setZoom(zoom * 1.5);
     else if (e.key === '-') setZoom(zoom / 1.5);
+    else if (e.key === '0') setZoom(1);
   });
 
-  // click the image to zoom in on that spot, click again to fit
-  let dragged = false;
+  // scroll wheel (and trackpad pinch) zooms toward the cursor
+  stage.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const step = e.deltaMode === 1 ? e.deltaY * 33 : e.deltaY;
+    setZoom(zoom * Math.exp(-step * 0.0015), e.clientX, e.clientY);
+  }, { passive: false });
+
+  // click the image to zoom in on that spot; click again to zoom back out to fit
   img.addEventListener('click', (e) => {
     if (dragged) return;
-    setZoom(zoom > 1 ? 1 : 2.5, e.clientX, e.clientY);
+    setZoom(zoom > 1 ? 1 : CLICK_ZOOM, e.clientX, e.clientY);
   });
 
   // drag to pan while zoomed
@@ -129,16 +154,20 @@
     if (zoom === 1 || e.button !== 0) return;
     drag = { x: e.clientX, y: e.clientY, left: stage.scrollLeft, top: stage.scrollTop };
     dragged = false;
-    stage.setPointerCapture(e.pointerId);
-    stage.classList.add('is-dragging');
   });
   stage.addEventListener('pointermove', (e) => {
     if (!drag) return;
     const dx = e.clientX - drag.x;
     const dy = e.clientY - drag.y;
-    if (Math.abs(dx) + Math.abs(dy) > 4) dragged = true;
-    stage.scrollLeft = drag.left - dx;
-    stage.scrollTop = drag.top - dy;
+    if (!dragged && Math.abs(dx) + Math.abs(dy) > 4) {
+      dragged = true;
+      stage.setPointerCapture(e.pointerId);
+      stage.classList.add('is-dragging');
+    }
+    if (dragged) {
+      stage.scrollLeft = drag.left - dx;
+      stage.scrollTop = drag.top - dy;
+    }
   });
   ['pointerup', 'pointercancel'].forEach((type) => stage.addEventListener(type, () => {
     drag = null;
