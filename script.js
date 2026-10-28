@@ -24,11 +24,22 @@
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
-  /* Certificate viewer: opens certificate images in an in-page dialog with
-     zoom (buttons, click, scroll wheel, keys), drag-to-pan, previous/next,
-     and download. Without JavaScript the links still open the image directly. */
-  const certLinks = Array.from(document.querySelectorAll('.cert__image'));
+  /* Certificate viewer: opens certificates in an in-page dialog with zoom
+     (buttons, click, scroll wheel, keys), drag-to-pan, previous/next, and
+     download. It opens from certificate cards and from "View certificate"
+     buttons on any page. Without JavaScript the links still work normally. */
+  const certLinks = Array.from(document.querySelectorAll('.cert__image, .cert-link[data-cert-src]'));
   if (!certLinks.length || typeof HTMLDialogElement !== 'function') return;
+
+  /* What to show for an opener: image URL, title, and a slug for the download name. */
+  function certInfo(link) {
+    if (link.dataset.certSrc) {
+      const src = link.dataset.certSrc;
+      return { src: src, name: link.dataset.certTitle, slug: src.split('/').pop().replace(/\.[a-z]+$/, '') };
+    }
+    const card = link.closest('.cert');
+    return { src: link.getAttribute('href'), name: card.querySelector('.cert__title').textContent.trim(), slug: card.id };
+  }
 
   const MAX_ZOOM = 5;
   const CLICK_ZOOM = 2.5;
@@ -87,19 +98,20 @@
   /* Show certificate number i (wraps around) at fit-to-screen size. */
   function show(i) {
     index = (i + certLinks.length) % certLinks.length;
-    const link = certLinks[index];
-    const card = link.closest('.cert');
-    const name = card.querySelector('.cert__title').textContent.trim();
+    const info = certInfo(certLinks[index]);
     zoom = 1;
     img.style.width = '';
     stage.classList.remove('is-zoomed');
     zoomOutBtn.disabled = true;
-    img.src = link.getAttribute('href');
-    img.alt = name + ' certificate';
-    title.textContent = name;
-    download.href = link.getAttribute('href');
-    download.setAttribute('download', 'Ahmed-Kheder-' + card.id + '.jpg');
+    img.src = info.src;
+    img.alt = info.name + ' certificate';
+    title.textContent = info.name;
+    download.href = info.src;
+    download.setAttribute('download', 'Ahmed-Kheder-' + info.slug + '.jpg');
   }
+
+  // with a single certificate on the page there is nothing to flip to
+  dialog.classList.toggle('viewer--single', certLinks.length === 1);
 
   certLinks.forEach((link, i) => {
     link.addEventListener('click', (e) => {
@@ -110,10 +122,10 @@
     });
   });
 
-  // focus goes back to the card on close; blur it so mouse users don't see a focus ring
+  // focus goes back to the opener on close; blur it so mouse users don't see a focus ring
   dialog.addEventListener('close', () => {
     const active = document.activeElement;
-    if (active && active.classList.contains('cert__image') && !active.matches(':focus-visible')) active.blur();
+    if (active && certLinks.includes(active) && !active.matches(':focus-visible')) active.blur();
   });
 
   dialog.addEventListener('click', (e) => {

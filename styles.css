@@ -611,16 +611,6 @@ p { margin-bottom: 1.3em; }
   transition: border-color var(--dur), background var(--dur);
 }
 .cert-link:hover { border-color: var(--text-muted); background: var(--bg-soft); color: var(--text); }
-/* arriving from a "View certificate" button: flash the card, then fade */
-@keyframes cert-flash {
-  0%, 50% { outline-color: var(--link); }
-  100% { outline-color: transparent; }
-}
-.cert:target .cert__image {
-  outline: 2px solid transparent;
-  outline-offset: 3px;
-  animation: cert-flash 2.5s ease-out;
-}
 .cert { scroll-margin-top: 24px; }
 .cert__image { cursor: zoom-in; }
 .cert__image:focus:not(:focus-visible) { outline: none; }
@@ -716,6 +706,7 @@ html:has(.viewer[open]) { overflow: hidden; }
   cursor: pointer;
 }
 .viewer__nav:hover { background: rgba(255, 255, 255, 0.15); }
+.viewer--single .viewer__nav { display: none; }
 .viewer__nav--prev { left: 12px; }
 .viewer__nav--next { right: 12px; }
 
